@@ -1,60 +1,128 @@
-简体中文 | [English](./README.en-US.md)
-<h1 align="center">Vue Antd Admin</h1>
+# 接口整理
 
-<div align="center">
-  
-[Ant Design Pro](https://github.com/ant-design/ant-design-pro) 的 Vue 实现版本  
-开箱即用的中后台前端/设计解决方案
-
-[![MIT](https://img.shields.io/github/license/iczer/vue-antd-admin)](https://github.com/iczer/vue-antd-admin/blob/master/LICENSE)
-[![Dependence](https://img.shields.io/david/iczer/vue-antd-admin)](https://david-dm.org/iczer/vue-antd-admin)
-[![DevDependencies](https://img.shields.io/david/dev/iczer/vue-antd-admin)](https://david-dm.org/iczer/vue-antd-admin?type=dev)
-[![Release](https://img.shields.io/github/v/release/iczer/vue-antd-admin)](https://github.com/iczer/vue-antd-admin/releases/latest)
-![image](./src/assets/img/preview.png)  
-
-多种主题模式可选：  
-![image](./src/assets/img/preview-nine.png)
-</div>
-
-- 预览地址：https://iczer.gitee.io/vue-antd-admin
-- 使用文档：https://iczer.gitee.io/vue-antd-admin-docs
-- 常见问题：https://iczer.gitee.io/vue-antd-admin-docs/start/faq.html
-- 国内镜像：https://gitee.com/iczer/vue-antd-admin
-
-## 浏览器支持
-现代浏览器及 IE10
-
-| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" alt="Opera" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Opera |
-| --- | --- | --- | --- | --- |
-| IE10, Edge | last 2 versions | last 2 versions | last 2 versions | last 2 versions |
-
-## 使用
-### clone
-```bash
-$ git clone https://github.com/iczer/vue-antd-admin.git
+## 登录
+- url: '/login'
+```ts
+name:string
+password:string
 ```
-### yarn
-```bash
-$ yarn install
-$ yarn serve
-```
-### or npm
-```
-$ npm install
-$ npm run serve
-```
-更多信息参考 [使用文档](https://iczer.gitee.io/vue-antd-admin-docs)
 
-## 参与贡献
-我们非常欢迎你的贡献，你可以通过以下方式和我们一起共建 :star2:：
-- 在你的公司或个人项目中使用 Vue Antd Admin。
-- 通过 [Issue](https://github.com/iczer/vue-antd-admin/issues) 报告:bug:或进行咨询。
-- 提交 [Pull Request](https://github.com/iczer/vue-antd-admin/pulls) 改进 Admin 的代码。
-- 加入社群，与小伙伴们一同交流心得。QQ群：942083829、 812277510（已满）、610090280（已满）
+## 注册
+- url: '/register'
+```ts
+name:string
+password:stringNN
+confirmPassword:string
+mobie: string
+```
 
-## 打赏
-如果该项目对您有所帮助，可以请作者喝一杯咖啡。
-<p>
-  <img src="./src/assets/img/alipay.png" width="320px" style="display: inline-block;" />
-  <img src="./src/assets/img/wechatpay.png" width="320px" style="display: inline-block; margin-left: 24px;" />
-</p>
+## 退出
+- url: '/logout'
+```ts
+
+```
+## 实时数据
+- 默认都是当日,近三天的(以及总数)
+```js
+// 获取当前人数情况
+// 查询条件
+// 浏览多少s才算有效 默认0s
+spaceTime
+// 浏览时候 停留时间
+stop
+// 滑动 停留切换 次数 记录 type:scroll_time 的次数
+scrollToSwith 
+--------------------------------------------------------
+// 返回数据
+getPeople:
+    {
+        // 在线人数  type:start_time 大于  type:end_time时间(可以没有) 并且 ( type stop_time 小于20分钟)
+        onlinePeople   
+        // 最近一个小时
+        latelyHour
+        // 今日uv: 今日的 同一个 id 访问 (type:start_time 有这个数据上报)
+        toDayUv  
+        // 总数uv: 所有的 同一个 id 访问 (type:start_time 有这个数据上报)
+        totalUv
+    }
+    // 流量整体分析
+getTimeAnalysis:
+    [
+        {
+            // 小于10秒
+            tyep:'lessOne',
+            num,
+            ratio,
+        },
+        {
+            // 10秒-20秒
+            tyep:'lessTwo',
+            num,
+            ratio,
+        },
+        {
+            // 20-50秒
+            tyep:'lessThree',
+            num,
+            ratio,
+        },
+        {
+            // 50-100秒
+            tyep:'lessFrour',
+            num,
+            ratio,
+        },
+        {
+            // 100-200秒
+            tyep:'lessFive',
+            num,
+            ratio,
+        },
+        {
+            // 200秒以上
+            tyep:'lessSix',
+            num,
+            ratio,
+        },
+    ]
+    // 最近三天的复制数据  (0-23h)
+ threeCopydata:{
+    oneDay:[],// 24个数据(每小时)
+    twoDay:[],// 24个数据(每小时)
+    threeDay:[],// 24个数据(每小时)
+ },   
+    // 最近三天的访问数据  (0-23h)
+ threePvdata:[
+    oneDay:[],// 24个数据(每小时)
+    twoDay:[],// 24个数据(每小时)
+    threeDay:[],// 24个数据(每小时)
+ ],   
+```
+
+## 分页查询识别微信号码统计
+```js
+// 查询条件 
+// 开始时间 结束时间
+startTime
+endTime
+// 选择微信号
+wxNumber
+// 访问时间
+visitorTime
+// 停留滑动比
+ratio      (type stop_time 等待的所有时间/当前所有的浏览时间)  浏览时间分2种 第一是如果有end_time（type end_time - type start_time） 第二种 否则就是用当但id上报的最有一个时间 减去（type start_time）
+----------------------------------------
+// 分页返回数据
+id 
+ip
+time
+wxNumber
+// 停留时间 所有的 type stop_time 时间
+stopTime 
+// 停留滑动比  同上
+ratio
+url
+
+// 返回总数
+// 操作  可删除当前数据
+```

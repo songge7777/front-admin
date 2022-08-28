@@ -1,19 +1,27 @@
 <template>
   <div>
-    sg
+    sg1231231232132132111312312
+    <div>12312</div>
+    <div>12312</div>
+    <div>12312</div>
+    <div>12312</div>
+    <div>12312</div>
+    <div>12312</div>
+    <div>12312</div>
+    <div>12312</div>
+    <div>12312</div>
+    <div>12312</div>
+    <div>12312</div>
+    <div>12312</div>
+    <div>12312</div>
+    <div>12312</div>
+    <div>12312</div>
   </div>
 </template>
 
 <script>
-import {mapState} from 'vuex'
 export default {
   name: 'sg',
-  computed: {
-    ...mapState('setting', ['pageMinHeight']),
-    minHeight() {
-      return this.pageMinHeight ? this.pageMinHeight + 'px' : '100vh'
-    }
-  }
 }
 </script>
 

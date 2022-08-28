@@ -35,6 +35,7 @@ async function request(url, method, params, config) {
     case METHOD.GET:
       return axios.get(url, {params, ...config})
     case METHOD.POST:
+      console.log(123123, url, params, config)
       return axios.post(url, params, config)
     default:
       return axios.get(url, {params, ...config})

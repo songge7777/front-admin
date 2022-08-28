@@ -7,72 +7,35 @@
       <div class="item">
         <a-tooltip v-for="item in popoverList" :key="item.name">
           <template #title>
-          {{item.title}}
+            {{ item.title }}
           </template>
-          {{item.name}}：{{item.num||0}}{{item.type}}
+          {{ item.name }}：{{ item.num || 0 }}{{ item.type }}
         </a-tooltip>
       </div>
     </div>
-    <div id="myChart" ref="canvasDom"></div>
-    <a-row style="margin-top: 0" :gutter="[24, 24]">
-      <a-col :sm="24" :md="12" :xl="6">
-        <chart-card :loading="loading" :title="$t('totalSales')" total="￥ 189,345">
-          <a-tooltip :title="$t('introduce')" slot="action">
-            <a-icon type="info-circle-o" />
-          </a-tooltip>
-          <div>
-            <trend style="margin-right: 16px" :term="$t('wow')" :percent="12" :is-increase="true" :scale="0" />
-            <trend :term="$t('dod')" :target="100" :value="89" :scale="0" />
-          </div>
-          <div slot="footer">{{$ta('daily|sales', 'p')}}<span> ￥234.56</span></div>
-        </chart-card>
-      </a-col>
-      <a-col :sm="24" :md="12" :xl="6">
-        <chart-card :loading="loading" :title="$t('visits')" total="￥ 189,345">
-          <a-tooltip :title="$t('introduce')" slot="action">
-            <a-icon type="info-circle-o" />
-          </a-tooltip>
-          <div>
-            <mini-area />
-          </div>
-          <div slot="footer">{{$ta('daily|visits', 'p')}}<span> 123,4</span></div>
-        </chart-card>
-      </a-col>
-      <a-col :sm="24" :md="12" :xl="6">
-        <chart-card :loading="loading" :title="$t('payments')" total="￥ 189,345">
-          <a-tooltip :title="$t('introduce')" slot="action">
-            <a-icon type="info-circle-o" />
-          </a-tooltip>
-          <div>
-            <mini-bar />
-          </div>
-          <div slot="footer">{{$t('conversion')}} <span>60%</span></div>
-        </chart-card>
-      </a-col>
-      <a-col :sm="24" :md="12" :xl="6">
-        <chart-card :loading="loading" :title="$t('operating')" total="73%">
-          <a-tooltip :title="$t('introduce')" slot="action">
-            <a-icon type="info-circle-o" />
-          </a-tooltip>
-          <div>
-            <mini-progress target="90" percent="78" color="#13C2C2" height="8px"/>
-          </div>
-          <div slot="footer" style="white-space: nowrap;overflow: hidden">
-            <trend style="margin-right: 16px" :term="$t('wow')" :percent="12" :is-increase="true" :scale="0" />
-            <trend :term="$t('dod')" :target="100" :value="89" :scale="0" />
-          </div>
-        </chart-card>
-      </a-col>
-    </a-row>
+    <div class="active-data">
+      <div class="title">
+        24小时访问流量分析
+      </div>
+      <div id="myChart" ref="canvasDom"></div>
+    </div>
+
+    <div class="active-data">
+      <div class="title">
+        24二维码识别分析
+      </div>
+      <div id="myChart2" ref="canvasDom2"></div>
+    </div>
+
     <div class="active-data">
       <div class="title">
         流量整体分析
       </div>
       <a-table class="one-table" :columns="columns" :data-source="data">
         <template #bodyCell="{ column, text }">
-        <template v-if="column.dataIndex === 'name'">
+          <template v-if="column.dataIndex === 'name'">
             <a>{{ text }}</a>
-        </template>
+          </template>
         </template>
       </a-table>
     </div>
@@ -80,16 +43,6 @@
 </template>
 
 <script>
-import ChartCard from "../../../components/card/ChartCard";
-import MiniArea from "../../../components/chart/MiniArea";
-import MiniBar from "../../../components/chart/MiniBar";
-import MiniProgress from "../../../components/chart/MiniProgress";
-// import Bar from "../../../components/chart/Bar";
-// import RankingList from "../../../components/chart/RankingList";
-// import HotSearch from './HotSearch'
-// import SalesData from './SalesData'
-import Trend from "../../../components/chart/Trend";
-
 import * as echarts from "echarts";
 import { GridComponent } from "echarts/components";
 import { LineChart } from "echarts/charts";
@@ -114,12 +67,13 @@ export default {
       rankList,
       loading: true,
       myChart: "",
+      myChart2: "",
       option: [],
       popoverList: [
         {
           name: "当前在线",
           type: "人",
-          num: null,
+          num: 0,
           btnType: "danger",
           title: "最近一分钟访问人数",
         },
@@ -199,26 +153,37 @@ export default {
           address: "Sidney No. 1 Lake Park, Sidney No. 1 Lake Park",
           tags: ["cool", "teacher"],
         },
+        {
+          key: "4",
+          name: "50-100秒",
+          age: 32,
+          address: "Sidney No. 1 Lake Park, Sidney No. 1 Lake Park",
+          tags: ["cool", "teacher"],
+        },
+        {
+          key: "5",
+          name: "100-200秒",
+          age: 32,
+          address: "Sidney No. 1 Lake Park, Sidney No. 1 Lake Park",
+          tags: ["cool", "teacher"],
+        },
+        {
+          key: "6",
+          name: "200秒以上",
+          age: 32,
+          address: "Sidney No. 1 Lake Park, Sidney No. 1 Lake Park",
+          tags: ["cool", "teacher"],
+        }
       ],
     };
   },
   created() {
     setTimeout(() => (this.loading = !this.loading), 1000);
   },
-  components: {
-    Trend,
-    //   SalesData,
-    //   HotSearch,
-    // RankingList,
-    // Bar,
-    MiniProgress,
-    MiniBar,
-    MiniArea,
-    ChartCard,
-  },
   mounted() {
     // 初始化折线图
     this.initLine();
+    this.initLine2();
   },
   methods: {
     initLine() {
@@ -227,38 +192,115 @@ export default {
       var option;
 
       option = {
-        yAxis: {
-          // type: "category",
-          data: [0, 0.5, 1, 1.5, 2],
+        title: {
+          text: '近三天访人员问数据'
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: ['前天', '昨天', '今天']
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
         },
         xAxis: {
-          type: "value",
-          axisLine: {
-            show: true,
-            lineStyle: { color: "#000" },
-          },
-          axisTick: {
-            show: false,
-          },
-          axisLabel: {
-            show: true,
-            inside: true,
-          },
-          min: 0,
-          max: 23,
-          splitNumber: 21,
+          type: 'category',
+          boundaryGap: false,
+          data: ['0时', '1时', '2时', '3时', '4时', '5时', '6时', '7时', '8时', '9时', '10时', '11时', '12时', '13时', '14时', '15时', '16时', '17时', '18时', '19时', '20时', '21时', '22时', '23时']
+        },
+        yAxis: {
+          type: 'value'
         },
         series: [
           {
-            data: [2, 12, 13, 15, 17, 21, 23],
-            type: "line",
-            // smooth: true, //曲线/折线
+            name: '前天',
+            type: 'line',
+            stack: 'Total',
+            data: [120, 132, 101, 134, 90, 230, 210, 120, 132, 101, 134, 90, 230, 210, 120, 132, 101, 134, 90, 230, 210, 11, 33, 44]
           },
-        ],
+          {
+            name: '昨天',
+            type: 'line',
+            stack: 'Total',
+            data: [220, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290, 330, 310, 11, 33, 44]
+          },
+          {
+            name: '今天',
+            type: 'line',
+            stack: 'Total',
+            data: [150, 232, 201, 154, 190, 330, 410, 150, 232, 201, 154, 190, 330, 410, 150, 232, 201, 154, 190, 330, 410, 22, 44, 55]
+          }
+        ]
       };
       option && myChart.setOption(option);
     },
-  },
+    initLine2() {
+      var chartDom = document.getElementById("myChart2");
+      var myChart2 = echarts.init(chartDom);
+      var option;
+
+      option = {
+        title: {
+          text: '近三天二维码复制数据'
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: ['前天', '昨天', '今天']
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: ['0时', '1时', '2时', '3时', '4时', '5时', '6时', '7时', '8时', '9时', '10时', '11时', '12时', '13时', '14时', '15时', '16时', '17时', '18时', '19时', '20时', '21时', '22时', '23时']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            name: '前天',
+            type: 'line',
+            stack: 'Total',
+            data: [120, 132, 101, 134, 90, 230, 210, 120, 132, 101, 134, 90, 230, 210, 120, 132, 101, 134, 90, 230, 210, 11, 33, 44]
+          },
+          {
+            name: '昨天',
+            type: 'line',
+            stack: 'Total',
+            data: [220, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290, 330, 310, 11, 33, 44]
+          },
+          {
+            name: '今天',
+            type: 'line',
+            stack: 'Total',
+            data: [150, 232, 201, 154, 190, 330, 410, 150, 232, 201, 154, 190, 330, 410, 150, 232, 201, 154, 190, 330, 410, 22, 44, 55]
+          }
+        ]
+      };
+      option && myChart2.setOption(option);
+    },
+  }
 };
 </script>
 
@@ -267,6 +309,12 @@ export default {
   width: 800px;
   height: 600px;
 }
+
+#myChart2 {
+  width: 800px;
+  height: 600px;
+}
+
 .analysis {
   .active-data {
     padding: 10px 0;
@@ -280,6 +328,7 @@ export default {
       background-color: #f2f2f2;
       color: red;
     }
+
     .item {
       span {
         display: inline-block;
@@ -297,25 +346,30 @@ export default {
         margin: 10px 0 10px 10px;
       }
     }
+
     .one-table {
       background-color: #fff;
     }
   }
 }
+
 .extra-wrap {
   .extra-item {
     display: inline-block;
     margin-right: 24px;
+
     a:not(:first-child) {
       margin-left: 24px;
     }
   }
 }
+
 @media screen and (max-width: 992px) {
   .extra-wrap .extra-item {
     display: none;
   }
 }
+
 @media screen and (max-width: 576px) {
   .extra-wrap {
     display: none;

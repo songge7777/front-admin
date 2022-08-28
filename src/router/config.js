@@ -14,7 +14,8 @@ const options = {
             name: "首页",
             component: TabsView,
             redirect: "/login",
-            children: [{
+            children: [
+                {
                     path: "dashboard",
                     name: "Dashboard",
                     meta: {
@@ -47,11 +48,12 @@ const options = {
                         icon: "warning",
                     },
                     component: BlankView,
-                    children: [{
+                    children: [
+                        {
                             path: "data",
-                            name: "抓包数据分析",
+                            name: "微信统计",
                             component: () =>
-                                import ("@/pages/sg/index"),
+                                import ("@/pages/sg/wx"),
                         },
                         {
                             path: "Statistics",
@@ -65,6 +67,22 @@ const options = {
                             component: () =>
                                 import ("@/pages/sg/flowAnalysis"),
                         },
+                    ],
+                },
+                {
+                    path: "study",
+                    name: "学习",
+                    meta: {
+                        icon: "warning",
+                    },
+                    component: BlankView,
+                    children: [{
+                            path: "test",
+                            name: "抓包数据分析",
+                            component: () =>
+                                import ("@/pages/study/index"),
+                        },
+                       
                     ],
                 },
             ],
