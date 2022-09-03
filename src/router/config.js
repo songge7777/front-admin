@@ -16,32 +16,6 @@ const options = {
             redirect: "/login",
             children: [
                 {
-                    path: "dashboard",
-                    name: "Dashboard",
-                    meta: {
-                        icon: "dashboard",
-                    },
-                    component: BlankView,
-                    children: [{
-                            path: "workplace",
-                            name: "工作台",
-                            meta: {
-                                page: {
-                                    closable: false,
-                                },
-                            },
-                            component: () =>
-                                import ("@/pages/dashboard/workplace"),
-                        },
-                        {
-                            path: "analysis",
-                            name: "分析页",
-                            component: () =>
-                                import ("@/pages/dashboard/analysis"),
-                        },
-                    ],
-                },
-                {
                     path: "analysis",
                     name: "分析",
                     meta: {

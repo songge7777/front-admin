@@ -5,7 +5,7 @@ import Cookie from 'js-cookie'
 const xsrfHeaderName = 'Authorization'
 
 axios.defaults.timeout = 5000
-axios.defaults.withCredentials= true
+// axios.defaults.withCredentials= true
 axios.defaults.xsrfHeaderName= xsrfHeaderName
 axios.defaults.xsrfCookieName= xsrfHeaderName
 
@@ -48,6 +48,7 @@ async function request(url, method, params, config) {
  * @param authType {AUTH_TYPE} 认证类型，默认：{AUTH_TYPE.BEARER}
  */
 function setAuthorization(auth, authType = AUTH_TYPE.BEARER) {
+  console.log('setAuthorization', auth, authType)
   switch (authType) {
     case AUTH_TYPE.BEARER:
       Cookie.set(xsrfHeaderName, 'Bearer ' + auth.token, {expires: auth.expireAt})

@@ -2,10 +2,10 @@
     <div class="statis-wrap">
         <div class="extra-wrap mb20" slot="tabBarExtraContent">
             <div class="extra-item">
-                <a>{{ $t('day') }}</a>
-                <a>{{ $t('week') }}</a>
-                <a>{{ $t('month') }}</a>
-                <a>{{ $t('year') }}</a>
+                <a>今日</a>
+                <a>本周</a>
+                <a>本月</a>
+                <a>今年</a>
             </div>
         </div>
         <div class="search-wrap mb20">
