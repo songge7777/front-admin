@@ -24,6 +24,12 @@ const options = {
                     component: BlankView,
                     children: [
                         {
+                            path: "product",
+                            name: "微信产品",
+                            component: () =>
+                                import ("@/pages/sg/product"),
+                        },
+                        {
                             path: "data",
                             name: "微信统计",
                             component: () =>
@@ -31,7 +37,7 @@ const options = {
                         },
                         {
                             path: "Statistics",
-                            name: "统计分析",
+                            name: "二维码复制分析",
                             component: () =>
                                 import ("@/pages/sg/statistics"),
                         },
@@ -43,22 +49,22 @@ const options = {
                         },
                     ],
                 },
-                {
-                    path: "study",
-                    name: "学习",
-                    meta: {
-                        icon: "warning",
-                    },
-                    component: BlankView,
-                    children: [{
-                            path: "test",
-                            name: "抓包数据分析",
-                            component: () =>
-                                import ("@/pages/study/index"),
-                        },
+                // {
+                //     path: "study",
+                //     name: "学习",
+                //     meta: {
+                //         icon: "warning",
+                //     },
+                //     component: BlankView,
+                //     children: [{
+                //             path: "test",
+                //             name: "抓包数据分析",
+                //             component: () =>
+                //                 import ("@/pages/study/index"),
+                //         },
                        
-                    ],
-                },
+                //     ],
+                // },
             ],
         },
     ],

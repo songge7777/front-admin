@@ -9,118 +9,75 @@
             </div>
         </div>
         <div class="search-wrap mb20">
-            <a-select ref="select" v-model="value1" style="width: 120px" @focus="focus" @change="handleChange">
-                <a-select-option value="jack">Jack</a-select-option>
-                <a-select-option value="lucy">Lucy</a-select-option>
-                <a-select-option value="disabled" disabled>Disabled</a-select-option>
-                <a-select-option value="Yiminghe">yiminghe</a-select-option>
-            </a-select>
             <a-range-picker :style="{ width: '256px' }"></a-range-picker>
-            <a-button type="primary">统计此产品</a-button>
+            <a-button type="primary">搜索</a-button>
         </div>
         <div class="qr-wrap mb20">
-            <div class="qr-title">渠道分析</div>
+            <div class="qr-title">二维码复制次数</div>
             <a-table :columns="columns" :data-source="data">
                 <template #bodyCell="{ column, text }">
-                    <template v-if="column.dataIndex === 'name'">
+                    <template v-if="column.dataIndex === 'wechatNo'">
                         <a>{{ text }}</a>
                     </template>
                 </template>
             </a-table>
         </div>
-        <div class="qr-wrap mb20">
-            <div class="qr-title">按字段统计</div>
-            <div class="qr-table-1">
-                <a-table class="one-table" :columns="columns" :data-source="data">
-                    <template #bodyCell="{ column, text }">
-                        <template v-if="column.dataIndex === 'name'">
-                            <a>{{ text }}</a>
-                        </template>
-                    </template>
-                </a-table>
-                <a-table class="two-table" :columns="columns" :data-source="data">
-                    <template #bodyCell="{ column, text }">
-                        <template v-if="column.dataIndex === 'name'">
-                            <a>{{ text }}</a>
-                        </template>
-                    </template>
-                </a-table>
-            </div>
-            <div class="qr-table-2">
-                <a-table class="one-table" :columns="columns" :data-source="data">
-                    <template #bodyCell="{ column, text }">
-                        <template v-if="column.dataIndex === 'name'">
-                            <a>{{ text }}</a>
-                        </template>
-                    </template>
-                </a-table>
-                <a-table class="two-table" :columns="columns" :data-source="data">
-                    <template #bodyCell="{ column, text }">
-                        <template v-if="column.dataIndex === 'name'">
-                            <a>{{ text }}</a>
-                        </template>
-                    </template>
-                </a-table>
-            </div>
-        </div>
     </div>
 </template>
 <script>
+import {
+	wechatQrAnalysis
+} from '@/services/user';
 export default {
     name: 'statistics',
     i18n: require('/src/pages/dashboard/analysis/i18n.js'),
     data() {
         return {
             value1: 'lucy',
+						// 分页
+						pageSize:10,
+						pageNumber:1,
+						total:0,
             columns: [
                 {
-                    title: '渠道码',
-                    dataIndex: 'name',
-                    key: 'name',
+                    title: '微信号码',
+                    dataIndex: 'wechatNo',
+                    key: 'wechatNo',
                 },
                 {
                     title: '复制次数',
-                    dataIndex: 'age',
-                    key: 'age',
+                    dataIndex: 'copyCount',
+                    key: 'copyCount',
                 },
                 {
                     title: '访问次数',
-                    dataIndex: 'address',
-                    key: 'address 1',
+                    dataIndex: 'browseCount',
+                    key: 'browseCount',
                     ellipsis: true,
                 },
             ],
-            data: [
-                {
-                    key: '1',
-                    name: 'John Brown',
-                    age: 32,
-                    address: 'New York No. 1 Lake Park, New York No. 1 Lake Park',
-                    tags: ['nice', 'developer'],
-                },
-                {
-                    key: '2',
-                    name: 'Jim Green',
-                    age: 42,
-                    address: 'London No. 2 Lake Park, London No. 2 Lake Park',
-                    tags: ['loser'],
-                },
-                {
-                    key: '3',
-                    name: 'Joe Black',
-                    age: 32,
-                    address: 'Sidney No. 1 Lake Park, Sidney No. 1 Lake Park',
-                    tags: ['cool', 'teacher'],
-                },
-            ],
+            data: [],
         }
     },
     mounted() {
-
+			this.getData();
     },
     methods: {
-        focus() { },
-        handleChange() { }
+			focus() { },
+			handleChange() { },
+			async getData(){
+				const {data} = await wechatQrAnalysis()
+				if(data.code === 0){
+					const rs = data.result;
+					this.pageSize=rs.pageSize,
+					this.pageNumber=rs.pageNumber,
+					this.total=rs.total,
+					this.data = rs.data.map(item => ({...item,key:item.id}))
+					console.log('==>1',rs)
+				}else{
+					this.$message.warning(data.message);
+				}
+			}
     },
 
 }
@@ -144,13 +101,11 @@ export default {
             }
         }
     }
-
     .search-wrap {
         .ant-calendar-picker {
             margin: 0 10px 0 10px;
         }
     }
-
     .qr-wrap {
         min-height: 150px;
         background: #fff;

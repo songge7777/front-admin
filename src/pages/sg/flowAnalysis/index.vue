@@ -13,6 +13,7 @@
         </a-tooltip>
       </div>
     </div>
+    <!-- 最近三天的访问数据 -->
     <div class="active-data">
       <div class="title">
         24小时访问流量分析
@@ -20,6 +21,7 @@
       <div id="myChart" ref="canvasDom"></div>
     </div>
 
+    <!-- 最近三天的复制数据 -->
     <div class="active-data">
       <div class="title">
         24二维码识别分析
@@ -30,6 +32,10 @@
     <div class="active-data">
       <div class="title">
         流量整体分析
+      </div>
+      <div class="search-wrap mb20">
+          <a-range-picker :style="{ width: '256px' }"></a-range-picker>
+          <a-button type="primary">搜索</a-button>
       </div>
       <a-table class="one-table" :columns="columns" :data-source="data">
         <template #bodyCell="{ column, text }">
@@ -48,7 +54,12 @@ import { GridComponent } from "echarts/components";
 import { LineChart } from "echarts/charts";
 import { UniversalTransition } from "echarts/features";
 import { CanvasRenderer } from "echarts/renderers";
-
+import {analysis} from '@/services/dataSource'
+import {
+	// fullFlowAnalysis,
+  browseData,
+  dataAnalysis
+} from '@/services/user';
 echarts.use([GridComponent, LineChart, CanvasRenderer, UniversalTransition]);
 const rankList = [];
 
@@ -69,6 +80,7 @@ export default {
       myChart: "",
       myChart2: "",
       option: [],
+      dataSource:{},
       popoverList: [
         {
           name: "当前在线",
@@ -76,6 +88,7 @@ export default {
           num: 0,
           btnType: "danger",
           title: "最近一分钟访问人数",
+          keyType: 'onlinePeople',
         },
         {
           name: "最近一小时",
@@ -83,6 +96,7 @@ export default {
           num: null,
           btnType: "danger",
           title: "最近一分钟访问人数",
+          keyType: 'latelyHour',
         },
         {
           name: "今日UV",
@@ -90,28 +104,30 @@ export default {
           num: null,
           btnType: "danger",
           title: "最近一分钟访问人数",
+          keyType: 'toDayUv',
         },
-        {
-          name: "今日PV",
-          type: "人",
-          num: null,
-          btnType: "danger",
-          title: "最近一分钟访问人数",
-        },
-        {
-          name: "总数UV",
-          type: "人",
-          num: null,
-          btnType: "danger",
-          title: "最近一分钟访问人数",
-        },
-        {
-          name: "总数PV",
-          type: "人",
-          num: null,
-          btnType: "danger",
-          title: "最近一分钟访问人数",
-        },
+        // {
+        //   name: "今日PV",
+        //   type: "人",
+        //   num: null,
+        //   btnType: "danger",
+        //   keyType: 'totalUv',
+        //   title: "最近一分钟访问人数",
+        // },
+        // {
+        //   name: "总数UV",
+        //   type: "人",
+        //   num: null,
+        //   btnType: "danger",
+        //   title: "最近一分钟访问人数",
+        // },
+        // {
+        //   name: "总数PV",
+        //   type: "人",
+        //   num: null,
+        //   btnType: "danger",
+        //   title: "最近一分钟访问人数",
+        // },
       ],
       columns: [
         {
@@ -178,19 +194,60 @@ export default {
     };
   },
   created() {
-    setTimeout(() => (this.loading = !this.loading), 1000);
+  // console.log(fullFlowAnalysis,
+  // browseData,
+  // dataAnalysis)
+
+  setTimeout(() => (this.loading = !this.loading), 1000);
   },
-  mounted() {
+  async mounted() {
+
+    const r = await analysis();
+    this.dataSource = r.data.result
+    this.handlerPopoverList();
     // 初始化折线图
     this.initLine();
     this.initLine2();
+
+    // 头部在线人数及uv
+    this.browseData()
+    // 整体流量分析
+    this.dataAnalysis()
   },
   methods: {
+    async browseData(){
+      const r1 = await browseData();
+      console.log('r1', r1)
+    },
+    async dataAnalysis(){
+      const r1 = await dataAnalysis();
+      console.log('r2', r1)
+    },
+    async fullFlowAnalysis(){
+      // const r1 = await fullFlowAnalysis();
+      // console.log('r2', r1)
+    },
+    handlerPopoverList(){
+      const getPeople = this.dataSource.getPeople
+      this.popoverList = this.popoverList.map((item)=>{
+        item.num = getPeople[item.keyType]
+        return item
+      })
+    },
+    hanlderThreePvData(source){
+      const r = Array.from({length:24},()=>{
+          return 0
+      })
+      source.forEach((item) => {
+        r[Number(item.h)] = Number(item.count)
+      });
+      return r
+    },
     initLine() {
+      const { threePvData } = this.dataSource;
       var chartDom = document.getElementById("myChart");
       var myChart = echarts.init(chartDom);
       var option;
-
       option = {
         title: {
           text: '近三天访人员问数据'
@@ -225,25 +282,28 @@ export default {
             name: '前天',
             type: 'line',
             stack: 'Total',
-            data: [120, 132, 101, 134, 90, 230, 210, 120, 132, 101, 134, 90, 230, 210, 120, 132, 101, 134, 90, 230, 210, 11, 33, 44]
+            data: this.hanlderThreePvData(threePvData.oneDay)
           },
           {
             name: '昨天',
             type: 'line',
             stack: 'Total',
-            data: [220, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290, 330, 310, 11, 33, 44]
+            data: this.hanlderThreePvData(threePvData.twoDay)
+            // data: [220, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290, 330, 310, 11, 33, 44]
           },
           {
             name: '今天',
             type: 'line',
             stack: 'Total',
-            data: [150, 232, 201, 154, 190, 330, 410, 150, 232, 201, 154, 190, 330, 410, 150, 232, 201, 154, 190, 330, 410, 22, 44, 55]
+            data: this.hanlderThreePvData(threePvData.threeDay)
+            // data: [150, 232, 201, 154, 190, 330, 410, 150, 232, 201, 154, 190, 330, 410, 150, 232, 201, 154, 190, 330, 410, 22, 44, 55]
           }
         ]
       };
       option && myChart.setOption(option);
     },
     initLine2() {
+      const { threeCopyData } = this.dataSource;
       var chartDom = document.getElementById("myChart2");
       var myChart2 = echarts.init(chartDom);
       var option;
@@ -282,19 +342,22 @@ export default {
             name: '前天',
             type: 'line',
             stack: 'Total',
-            data: [120, 132, 101, 134, 90, 230, 210, 120, 132, 101, 134, 90, 230, 210, 120, 132, 101, 134, 90, 230, 210, 11, 33, 44]
+            data: this.hanlderThreePvData(threeCopyData.threeDay)
+            // data: [120, 132, 101, 134, 90, 230, 210, 120, 132, 101, 134, 90, 230, 210, 120, 132, 101, 134, 90, 230, 210, 11, 33, 44]
           },
           {
             name: '昨天',
             type: 'line',
             stack: 'Total',
-            data: [220, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290, 330, 310, 11, 33, 44]
+            data: this.hanlderThreePvData(threeCopyData.twoDay)
+            // data: [220, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290, 330, 310, 11, 33, 44]
           },
           {
             name: '今天',
             type: 'line',
             stack: 'Total',
-            data: [150, 232, 201, 154, 190, 330, 410, 150, 232, 201, 154, 190, 330, 410, 150, 232, 201, 154, 190, 330, 410, 22, 44, 55]
+            data: this.hanlderThreePvData(threeCopyData.oneDay)
+            // data: [150, 232, 201, 154, 190, 330, 410, 150, 232, 201, 154, 190, 330, 410, 150, 232, 201, 154, 190, 330, 410, 22, 44, 55]
           }
         ]
       };

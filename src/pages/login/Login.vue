@@ -102,20 +102,14 @@ export default {
       })
     },
     afterLogin(res) {
-      console.log('res', res)
       this.logging = false
       const loginRes = res.data
       if (loginRes.code === 0) {
-        // const { user, permissions, roles } = loginRes.data
-        // this.setUser(user)
-        // this.setPermissions(permissions)
-        // this.setRoles(roles)
+        const { result } = loginRes
+        this.setUser(result)
         var d = new Date();
-
-        // setAuthorization({ token: loginRes.result.token, expireAt: new Date(loginRes.data.expireAt) })
-        console.log(123)
+        sessionStorage.setItem('token', loginRes.result.token)
         setAuthorization({ token: loginRes.result.token, expireAt: new Date(d.getTime() + 1000 * 24 * 60 * 60) })
-        console.log(456)
         this.$router.push('/analysis/data')
 
         // // 获取路由配置

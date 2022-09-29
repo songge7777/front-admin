@@ -114,7 +114,6 @@ function loadRoutes(routesConfig) {
   }
   // 如果开启了异步路由，则加载异步路由配置
   const asyncRoutes = store.state.setting.asyncRoutes
-  console.log('asyncRoutes', asyncRoutes,'==', router.options.routes)
   if (asyncRoutes) {
     if (routesConfig && routesConfig.length > 0) {
       const routes = parseRoutes(routesConfig, routerMap)
@@ -129,7 +128,6 @@ function loadRoutes(routesConfig) {
   mergeI18nFromRoutes(i18n, router.options.routes)
   // 初始化Admin后台菜单数据
   const rootRoute = router.options.routes.find(item => item.path === '/')
-  console.log('rootRoute', rootRoute, router.options.routes)
   const menuRoutes = rootRoute && rootRoute.children
   if (menuRoutes) {
     store.commit('setting/setMenuData', menuRoutes)

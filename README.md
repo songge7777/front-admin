@@ -21,7 +21,7 @@ mobie: string
 ```ts
 
 ```
-## 实时数据
+## 实时数据- 流量分析
 - 默认都是当日,近三天的(以及总数)
 ```js
 // 获取当前人数情况
@@ -125,4 +125,74 @@ url
 
 // 返回总数
 // 操作  可删除当前数据
+```
+
+## 产品分页
+- 添加/编辑
+- 删除
+```js
+// 产品名字
+name
+// 图片地址  图片上传
+url
+// 微信号码
+name
+```
+列表
+```js
+// 随机给
+id
+// 产品名字
+name
+// 图片地址
+url
+// 微信号码
+nunber
+// 添加时间
+time
+```
+
+## 上报逻辑---更新
+```js
+1、首次进入页面上报信息 
+currentTime 当前时间
+isWxBrowser 是否是微信浏览器
+navigatorUserAgent 浏览器信息
+wxNumber 微信号码
+url 产品
+
+2、一旦开始滑动 就开始上报数据 页面停止的时候
+currentPageSite 当前滑动的比例位子(比如"3%")
+currentTime 当前时间
+isWxBrowser 是否是微信浏览器
+navigatorUserAgent 浏览器信息
+stopTime 当前停留的时间
+wxNumber 微信号码
+url 产品
+
+3、页面滑动的时候 
+currentPageSite 当前滑动的比例位子(比如"3%")
+currentTime 当前时间
+isWxBrowser 是否是微信浏览器
+navigatorUserAgent 浏览器信息
+wxNumber 微信号码
+url 产品
+
+4、二维码 长按识别
+time 长按识别时间 700ms
+wxNumber 微信号码
+isWxBrowser 否是微信浏览器
+navigatorUserAgent 浏览器信息
+url 产品
+
+
+5、页面离开的时候  浏览器关闭
+currentPageSite 当前滑动的比例位子(比如"3%")
+currentTime 当前时间
+isWxBrowser 是否是微信浏览器
+navigatorUserAgent 浏览器信息
+wxNumber 微信号码
+url 产品
+
+6、微信号码动态获取
 ```

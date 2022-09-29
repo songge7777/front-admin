@@ -23,34 +23,17 @@
     <a-form-item label="微信号码" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
       <a-input placeholder="input placeholder" />
     </a-form-item>
-    <a-form-item label="停留滑动比" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
-      <a-input placeholder="input placeholder" />
-    </a-form-item>
     <a-form-item :wrapper-col="buttonItemLayout.wrapperCol">
       <a-button type="primary">
         Submit
       </a-button>
     </a-form-item>
   </a-form>
-  <a-table :columns="columns" :data-source="data">
+  <a-table
+    :columns="columns"
+    :data-source="data"
+  >
     <span slot="time" slot-scope="text">{{ fn(text) }}</span>
-    <!-- <span slot="customTitle"><a-icon type="smile-o" /> Name</span> -->
-    <!-- <span slot="tags" slot-scope="tags">
-      <a-tag
-        v-for="tag in tags"
-        :key="tag"
-        :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
-      >
-        {{ tag.toUpperCase() }}
-      </a-tag>
-    </span>
-    <span slot="action" slot-scope="text, record">
-      <a>Invite 一 {{ record.name }}</a>
-      <a-divider type="vertical" />
-      <a>Delete</a>
-      <a-divider type="vertical" />
-      <a class="ant-dropdown-link"> More actions <a-icon type="down" /> </a>
-    </span> -->
   </a-table>
 </div>
 </template>
@@ -82,15 +65,20 @@
     key: 'wxNumber',
   },
   {
-    title: '停留滑动比',
+    title: '停留预览时间',
     key: 'stopTime',
     dataIndex: 'stopTime',
     scopedSlots: { customRender: 'tags' },
   },
   {
-    title: '滑动比',
+    title: '滑动占总时间比例',
     dataIndex: 'ratio',
     key: 'ratio',
+  },
+  {
+    title: '浏览总时长',
+    dataIndex: 'ratio1',
+    key: 'ratio1',
   },
   {
     title: 'url',
@@ -114,6 +102,7 @@ const data = [
     stopTime:Date.now(),
     // 停留滑动比  同上
     ratio:'50%',
+    ratio1:'1S',
     url:'www.baidu.com'
   },
   {
@@ -124,6 +113,7 @@ const data = [
     // 停留时间 所有的 type stop_time 时间
     stopTime:Date.now(),
     // 停留滑动比  同上
+    ratio1:'1S',
     ratio:'50%',
     url:'www.baidu.com'
   },
@@ -136,6 +126,7 @@ const data = [
     stopTime:Date.now(),
     // 停留滑动比  同上
     ratio:'50%',
+    ratio1:'1S',
     url:'www.baidu.com'
   },
   {
@@ -146,6 +137,7 @@ const data = [
     // 停留时间 所有的 type stop_time 时间
     stopTime:Date.now(),
     // 停留滑动比  同上
+    ratio1:'1S',
     ratio:'50%',
     url:'www.baidu.com'
   }

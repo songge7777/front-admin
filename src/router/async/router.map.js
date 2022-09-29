@@ -22,12 +22,6 @@ const routerMap = {
     name: 'Dashboard',
     component: view.blank
   },
-  analysis: {
-    authority: '*',
-    name: 'Dnalysis',
-    path: 'analysis',
-    component: () => import('@/pages/analysis')
-  },
 }
 export default routerMap
 

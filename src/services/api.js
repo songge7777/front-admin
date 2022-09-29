@@ -6,5 +6,20 @@ module.exports = {
   LOGIN: `${BASE_URL}/login`,
   ROUTES: `${BASE_URL}/routes`,
   GOODS: `${BASE_URL}/goods`,
+  GETUSERINFO:`${BASE_URL}/account`,
+  ANALYSIS:`${BASE_URL}/browseData/analysis`,
   GOODS_COLUMNS: `${BASE_URL}/columns`,
+
+
+  UPLOAD: `${BASE_URL}/upload`,
+  WECHATPRODUCT: `${BASE_URL}/wechatProduct`,
+
+  WECHARQRANALYSIS: `${BASE_URL}/wechatQrAnalysis`,
+
+  // 整体流量分析
+  FULLFLOWANALYSIS: `${BASE_URL}/browseData/fullFlowAnalysis`,
+  // 头部在线人数及uv
+  BROWSEDATA: `${BASE_URL}/browseData`,
+  // 实时数据分析
+  DATAANAKYSIS: `${BASE_URL}/browseData/analysis`,
 }
